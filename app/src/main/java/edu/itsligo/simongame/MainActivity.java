@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+
+import org.w3c.dom.Comment;
 
 import java.util.List;
 
@@ -18,20 +21,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DatabaseHandler db = new DatabaseHandler(this);
-
-        db.emptyHiScores();     // empty table if required
+//        DatabaseHandler db = new DatabaseHandler(this);
+//
+//        db.emptyHiScores();     // empty table if required
 
         // Inserting hi scores
-        Log.i("Insert: ", "Inserting ..");
-        db.addHiScore(new HiScore("20 OCT 2020", "Frodo", 12));
-        db.addHiScore(new HiScore("28 OCT 2020", "Dobby", 16));
-        db.addHiScore(new HiScore("20 NOV 2020", "DarthV", 20));
-        db.addHiScore(new HiScore("20 NOV 2020", "Bob", 18));
-        db.addHiScore(new HiScore("22 NOV 2020", "Gemma", 22));
-        db.addHiScore(new HiScore("30 NOV 2020", "Joe", 30));
-        db.addHiScore(new HiScore("01 DEC 2020", "DarthV", 22));
-        db.addHiScore(new HiScore("02 DEC 2020", "Gandalf", 132));
+//        Log.i("Insert: ", "Inserting ..");
+//        db.addHiScore(new HiScore("20 OCT 2020", "Frodo", 12));
+//        db.addHiScore(new HiScore("28 OCT 2020", "Dobby", 16));
+//        db.addHiScore(new HiScore("20 NOV 2020", "DarthV", 20));
+//        db.addHiScore(new HiScore("20 NOV 2020", "Bob", 18));
+//        db.addHiScore(new HiScore("22 NOV 2020", "Gemma", 22));
+//        db.addHiScore(new HiScore("30 NOV 2020", "Joe", 30));
+//        db.addHiScore(new HiScore("01 DEC 2020", "DarthV", 22));
+//        db.addHiScore(new HiScore("02 DEC 2020", "Gandalf", 132));
 
 
         // Reading all scores
@@ -56,21 +59,29 @@ public class MainActivity extends AppCompatActivity {
 //        Log.i("High Score 5 is by ", singleScore.getPlayer_name() + " with a score of " +
 //                singleScore.getScore());
 
-        Log.i("divider 2", "====================");
+//        Log.i("divider 2", "====================");
+//
+//        // Calling SQL statement
+//        List<HiScore> top5HiScores = db.getTopFiveScores();
+//
+//        for (HiScore hs : top5HiScores) {
+//            String log =
+//                    "Id: " + hs.getScore_id() +
+//                            ", Date: " + hs.getGame_date() +
+//                            " , Player: " + hs.getPlayer_name() +
+//                            " , Score: " + hs.getScore();
+//
+//            // Writing HiScore to log
+//            Log.i("Score: ", log);
+//        }
 
-        // Calling SQL statement
-        List<HiScore> top5HiScores = db.getTopFiveScores();
 
-        for (HiScore hs : top5HiScores) {
-            String log =
-                    "Id: " + hs.getScore_id() +
-                            ", Date: " + hs.getGame_date() +
-                            " , Player: " + hs.getPlayer_name() +
-                            " , Score: " + hs.getScore();
 
-            // Writing HiScore to log
-            Log.i("Score: ", log);
-        }
+        // use the SimpleCursorAdapter to show the
+        // elements in a ListView
+//        ArrayAdapter<Comment> adapter = new ArrayAdapter<Comment>(this,
+//                android.R.layout.simple_list_item_1, values);
+//        setListAdapter(adapter);
     }
 
 

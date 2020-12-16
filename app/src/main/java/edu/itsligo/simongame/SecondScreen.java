@@ -3,6 +3,7 @@ package edu.itsligo.simongame;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -36,37 +37,47 @@ public class SecondScreen extends AppCompatActivity {
 
     public void doPlay(View view) {
 
-      for (int i = 0; i < sequenceCount; i++) {
-        // Need to generate a random sequence
-        // start at 4 values, increase by 2 every time
-        n = getRandom(sequenceCount);
 
-        Toast.makeText(this, "Number = " + String.valueOf(n), Toast.LENGTH_SHORT).show();
+        for (int i = 0; i < sequenceCount; i++) {
+            // Need to generate a random sequence
+            // start at 4 values, increase by 2 every time
+            n=0;
 
-        final Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                switch (n) {
-                    case 1:
-                        flashButton(bBlue);
-                        break;
-                    case 2:
-                        flashButton(bRed);
-                        break;
-                    case 3:
-                        flashButton(bYellow);
-                        break;
-                    case 4:
-                        flashButton(bGreen);
-                        break;
-                    default:
-                        break;
-                }   // end switch
-            }
-        }, 1000);
-    }  // end loop
-}
+
+
+            final Handler handler = new Handler();
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    n = getRandom(sequenceCount);
+
+                    switch (n) {
+                        case 1:
+                            flashButton(bBlue);
+                            break;
+                        case 2:
+                            flashButton(bRed);
+                            break;
+                        case 3:
+                            flashButton(bYellow);
+                            break;
+                        case 4:
+                            flashButton(bGreen);
+                            break;
+                        default:
+                            break;
+                    }   // end switch
+                }
+            }, 1000*i);
+        }  // end loop
+
+
+
+
+    }
+
+
 
     //
     // return a number between 1 and maxValue
@@ -78,31 +89,23 @@ public class SecondScreen extends AppCompatActivity {
     private void flashButton(Button button) {
         fb = button;
         Handler handler = new Handler();
-        Runnable r = new Runnable() {
+        handler.postDelayed(new Runnable() {
+            @Override
             public void run() {
-
                 fb.setPressed(true);
                 fb.invalidate();
                 fb.performClick();
-                Handler handler1 = new Handler();
-                Runnable r1 = new Runnable() {
-                    public void run() {
-                        fb.setPressed(false);
-                        fb.invalidate();
-                    }
-                };
-                handler1.postDelayed(r1, 600);
-
-            } // end runnable
-        };
-        handler.postDelayed(r, 600);
+            }
+        },600);
+        fb.setPressed(false);
+        fb.invalidate();
     }
 
     public void doTest(View view) {
         for (int i = 0; i < sequenceCount; i++) {
             int x = getRandom(sequenceCount);
 
-            Toast.makeText(this, "Number = " + String.valueOf(x), Toast.LENGTH_SHORT).show();
+
 
             if (x == 1)
                 flashButton(bBlue);

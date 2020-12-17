@@ -3,23 +3,53 @@ package edu.itsligo.simongame;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Looper;
+import android.util.Log;
 import android.view.View;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class SecondScreen extends AppCompatActivity {
-    Button btplay,fb;
-    Button bRed,bBlue,bYellow,bGreen;
+    private final int BLUE = 1;
+    private final int RED = 2;
+    private final int YELLOW = 3;
+    private final int GREEN = 4;
+
+    Button btplay, fb;
+    Button bRed, bBlue, bYellow, bGreen;
+    int[] gameSequence = new int[120];
+    int arrayIndex = 0;
+
     int sequenceCount = 4, n = 0;
     private Object mutex = new Object();
+
+    CountDownTimer ct = new CountDownTimer(6000,  1500) {
+
+        public void onTick(long millisUntilFinished) {
+            //mTextField.setText("seconds remaining: " + millisUntilFinished / 1500);
+            oneButton();
+            //here you can have your logic to set text to edittext
+        }
+
+        public void onFinish() {
+            //mTextField.setText("done!");
+            // we now have the game sequence
+
+            for (int i = 0; i< arrayIndex; i++)
+                Log.d("game sequence", String.valueOf(gameSequence[i]));
+            // start next activity
+
+
+            Intent i = new Intent(SecondScreen.this, GameScreen.class);
+            i.putExtra("numbers", arrayIndex);
+            startActivity(i);
+
+
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,95 +57,80 @@ public class SecondScreen extends AppCompatActivity {
         setContentView(R.layout.activity_second_screen);
 
         btplay = findViewById(R.id.btReady);
-        bRed = findViewById(R.id.btRight);
-        bBlue = findViewById(R.id.btTop);
-        bGreen = findViewById(R.id.btBottom);
-        bYellow = findViewById(R.id.btLeft);
+        bRed = findViewById(R.id.btRed2);
+        bBlue = findViewById(R.id.btBlue2);
+        bGreen = findViewById(R.id.btGreen2);
+        bYellow = findViewById(R.id.btYellow2);
+
+
 
     }
+
 
 
     public void doPlay(View view) {
-
-
-        for (int i = 0; i < sequenceCount; i++) {
-            // Need to generate a random sequence
-            // start at 4 values, increase by 2 every time
-            n=0;
-
-
-
-            final Handler handler = new Handler();
-
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    n = getRandom(sequenceCount);
-
-                    switch (n) {
-                        case 1:
-                            flashButton(bBlue);
-                            break;
-                        case 2:
-                            flashButton(bRed);
-                            break;
-                        case 3:
-                            flashButton(bYellow);
-                            break;
-                        case 4:
-                            flashButton(bGreen);
-                            break;
-                        default:
-                            break;
-                    }   // end switch
-                }
-            }, 1000*i);
-        }  // end loop
-
-
-
-
+        ct.start();
     }
 
+    private void oneButton() {
+        n = getRandom(sequenceCount);
 
+        Toast.makeText(this, "Number = " + n, Toast.LENGTH_SHORT).show();
+
+        switch (n) {
+            case 1:
+                flashButton(bBlue);
+                gameSequence[arrayIndex++] = BLUE;
+                break;
+            case 2:
+                flashButton(bRed);
+                gameSequence[arrayIndex++] = RED;
+                break;
+            case 3:
+                flashButton(bYellow);
+                gameSequence[arrayIndex++] = YELLOW;
+                break;
+            case 4:
+                flashButton(bGreen);
+                gameSequence[arrayIndex++] = GREEN;
+                break;
+            default:
+                break;
+        }   // end switch
+    }
 
     //
     // return a number between 1 and maxValue
     private int getRandom(int maxValue) {
-        int rn = (int) ((Math.random() * maxValue) + 1);
-        return (rn);
+        return ((int) ((Math.random() * maxValue) + 1));
     }
 
     private void flashButton(Button button) {
         fb = button;
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
+        Runnable r = new Runnable() {
             public void run() {
+
                 fb.setPressed(true);
                 fb.invalidate();
                 fb.performClick();
-            }
-        },600);
-        fb.setPressed(false);
-        fb.invalidate();
+                Handler handler1 = new Handler();
+                Runnable r1 = new Runnable() {
+                    public void run() {
+                        fb.setPressed(false);
+                        fb.invalidate();
+                    }
+                };
+                handler1.postDelayed(r1, 600);
+
+            } // end runnable
+        };
+        handler.postDelayed(r, 600);
     }
 
+
     public void doTest(View view) {
-        for (int i = 0; i < sequenceCount; i++) {
-            int x = getRandom(sequenceCount);
-
-
-
-            if (x == 1)
-                flashButton(bBlue);
-            else if (x == 2)
-                flashButton(bRed);
-            else if (x == 3)
-                flashButton(bYellow);
-            else if (x == 4)
-                flashButton(bGreen);
-        }
-
+        Intent intent = new Intent(view.getContext(), GameScreen.class);
+        startActivity(intent);
     }
 }

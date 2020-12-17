@@ -8,43 +8,43 @@
     tools:context=".SecondScreen">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btTop"
+        android:id="@+id/btBlue2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button"
         android:background="@drawable/roundbutton_top"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btRight"
+        app:layout_constraintEnd_toStartOf="@+id/btRed2"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btRight"
+        android:id="@+id/btRed2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button"
         android:background="@drawable/roundbutton_right"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btBottom"
+        app:layout_constraintEnd_toStartOf="@+id/btGreen2"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btTop"
+        app:layout_constraintStart_toEndOf="@+id/btBlue2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btBottom"
+        android:id="@+id/btGreen2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button"
         android:background="@drawable/roundbutton_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btLeft"
+        app:layout_constraintEnd_toStartOf="@+id/btYellow2"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btRight"
+        app:layout_constraintStart_toEndOf="@+id/btRed2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btLeft"
+        android:id="@+id/btYellow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button"
@@ -52,7 +52,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btBottom"
+        app:layout_constraintStart_toEndOf="@+id/btGreen2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton

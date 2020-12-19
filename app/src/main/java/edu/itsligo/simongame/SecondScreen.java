@@ -1,15 +1,23 @@
 package edu.itsligo.simongame;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class SecondScreen extends AppCompatActivity {
     private final int BLUE = 1;
@@ -19,80 +27,123 @@ public class SecondScreen extends AppCompatActivity {
 
     Button btplay, fb;
     Button bRed, bBlue, bYellow, bGreen;
-    int[] gameSequence = new int[120];
-    int arrayIndex = 0;
 
+    ArrayList<Integer> gameSequence;
+    int arrayIndex = 0;
+    TextView level;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+    int seq=0;
     int sequenceCount = 4, n = 0;
     private Object mutex = new Object();
+
+    Handler handler;
+
+    Runnable runnable;
 
     CountDownTimer ct = new CountDownTimer(6000,  1500) {
 
         public void onTick(long millisUntilFinished) {
-            //mTextField.setText("seconds remaining: " + millisUntilFinished / 1500);
             oneButton();
-            //here you can have your logic to set text to edittext
         }
 
         public void onFinish() {
-            //mTextField.setText("done!");
-            // we now have the game sequence
-
             for (int i = 0; i< arrayIndex; i++)
-                Log.d("game sequence", String.valueOf(gameSequence[i]));
-            // start next activity
-
-
+                Log.d("game sequence", String.valueOf(gameSequence.get(i)));
             Intent i = new Intent(SecondScreen.this, GameScreen.class);
-            i.putExtra("numbers", arrayIndex);
-            startActivity(i);
-
-
+            i.putIntegerArrayListExtra("numbers", gameSequence);
+            startActivityForResult(i,1);
         }
     };
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode==1){
+            seq=0;
+            gameSequence.clear();
+            editor.putInt("Level",data.getIntExtra("level",1));
+            editor.putInt("seqcount",data.getIntExtra("seq",4));
+            editor.putInt("score",data.getIntExtra("score",0));
+            editor.commit();
+            sequenceCount=data.getIntExtra("seq",4);
+            level.setText(String.valueOf(data.getIntExtra("level",1)));
+            if (data.getStringExtra("Result").equals("S")){
+                Toast.makeText(this, "Congratulations!!", Toast.LENGTH_SHORT).show();
+                handler.postDelayed(runnable,1500);
+            }
+            else {
+                AlertDialog.Builder builder=new AlertDialog.Builder(SecondScreen.this);
+                builder.setTitle("Game Over");
+                builder.setMessage("Your Score was "+data.getIntExtra("score",0));
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second_screen);
-
+        handler=new Handler();
+        runnable =new Runnable() {
+            @Override
+            public void run() {
+                if (seq<sequenceCount) {
+                    oneButton();
+                    handler.postDelayed(this, 1500);
+                    seq++;
+                }
+                else {
+                    handler.removeCallbacks(this);
+                    Intent i = new Intent(SecondScreen.this, GameScreen.class);
+                    i.putIntegerArrayListExtra("numbers", gameSequence);
+                    startActivityForResult(i,1);
+                }
+            }
+        };
+        preferences = PreferenceManager.getDefaultSharedPreferences(SecondScreen.this);
+        editor = preferences.edit();
+        gameSequence=new ArrayList<>();
+        level=findViewById(R.id.textView4);
+        level.setText(String.valueOf(preferences.getInt("Level",1)));
         btplay = findViewById(R.id.btReady);
         bRed = findViewById(R.id.btRed2);
         bBlue = findViewById(R.id.btBlue2);
         bGreen = findViewById(R.id.btGreen2);
         bYellow = findViewById(R.id.btYellow2);
-
-
-
     }
 
 
 
     public void doPlay(View view) {
-        ct.start();
+        handler.postDelayed(runnable,1500);
     }
 
     private void oneButton() {
-        n = getRandom(sequenceCount);
-
-        Toast.makeText(this, "Number = " + n, Toast.LENGTH_SHORT).show();
-
+        n = getRandom(4);
         switch (n) {
             case 1:
                 flashButton(bBlue);
-                gameSequence[arrayIndex++] = BLUE;
+                gameSequence.add(BLUE);
                 break;
             case 2:
                 flashButton(bRed);
-                gameSequence[arrayIndex++] = RED;
+                gameSequence.add(RED);
                 break;
             case 3:
                 flashButton(bYellow);
-                gameSequence[arrayIndex++] = YELLOW;
+                gameSequence.add(YELLOW);
                 break;
             case 4:
                 flashButton(bGreen);
-                gameSequence[arrayIndex++] = GREEN;
+                gameSequence.add(GREEN);
                 break;
             default:
                 break;

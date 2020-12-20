@@ -29,12 +29,18 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
+
     TextView tvx, tvy, tvz, tvSteps;
     private SensorManager mSensorManager;
     private Sensor mSensor;
-    Button btred,btblue,btyellow,btgreen;
-    int clicked=0;
-    ArrayList<Integer> clickedSequence;
+    Button btred, btblue, btyellow, btgreen;
+    int clicked = 0;
+    private final double MOVE_FORWARD = -0.5;     // x
+    private final double MOVE_BACKWARD = 8;      // z
+    private final double MOVE_LEFT = -1;        // y
+    private final double MOVE_RIGHT = 1;       // y
+    public ArrayList<Integer> clickedSequence;
+    public ArrayList<Integer> titleSequence;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +49,11 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
         btblue = findViewById(R.id.btBlue2);
         btred = findViewById(R.id.btRed2);
         btgreen = findViewById(R.id.btGreen2);
-        preferences=getSharedPreferences("score_ref", MODE_PRIVATE);
-        editor=preferences.edit();
+        preferences = getSharedPreferences("score_ref", MODE_PRIVATE);
+        editor = preferences.edit();
         btyellow = findViewById(R.id.btYellow2);
-        clickedSequence=new ArrayList<>();
+        clickedSequence = new ArrayList<>();
+        titleSequence = new ArrayList<>();
         Bundle extras = getIntent().getExtras();
         ArrayList<Integer> gameSequence = extras.getIntegerArrayList("numbers");
         for (int value : gameSequence) {
@@ -60,34 +67,33 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
             public void onClick(View v) {
                 clickedSequence.add(BLUE);
                 clicked++;
-                if (clicked>=gameSequence.size()){
-                    if (clickedSequence.equals(gameSequence)){
-                        Toast.makeText(getApplicationContext(),"Matched",Toast.LENGTH_LONG).show();
-                        Intent intent=new Intent();
-                        intent.putExtra("Result","S");
-                        intent.putExtra("seq",gameSequence.size()+2);
-                        int l=preferences.getInt("Level",1);
+                if (clicked >= gameSequence.size()) {
+                    if (clickedSequence.equals(gameSequence)) {
+                        Toast.makeText(getApplicationContext(), "Matched", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent();
+                        intent.putExtra("Result", "S");
+                        intent.putExtra("seq", gameSequence.size() + 2);
+                        int l = preferences.getInt("Level", 1);
                         l++;
-                        int s=preferences.getInt("score",0);
-                        s+=gameSequence.size();
-                        intent.putExtra("score",s);
-                        intent.putExtra("level",l);
-                        setResult(Activity.RESULT_OK,intent);
-                    }
-                    else {
+                        int s = preferences.getInt("score", 0);
+                        s += gameSequence.size();
+                        intent.putExtra("score", s);
+                        intent.putExtra("level", l);
+                        setResult(Activity.RESULT_OK, intent);
+                    } else {
                         Toast.makeText(GameScreen.this, "Failed", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(GameScreen.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-                        int s=preferences.getInt("score",0);
-                        intent.putExtra("score",s);
-                        intent.putExtra("Result","L");
+                        int s = preferences.getInt("score", 0);
+                        intent.putExtra("score", s);
+                        intent.putExtra("Result", "L");
                         startActivity(intent);
                         // setResult(Activity.RESULT_OK,intent);
                     }
                     finish();
-                    clicked=0;
+                    clicked = 0;
                     clickedSequence.clear();
                 }
             }
@@ -97,34 +103,33 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
             public void onClick(View v) {
                 clickedSequence.add(GREEN);
                 clicked++;
-                if (clicked>=gameSequence.size()){
-                    if (clickedSequence.equals(gameSequence)){
-                        Toast.makeText(getApplicationContext(),"Matched",Toast.LENGTH_LONG).show();
-                        Intent intent=new Intent();
-                        intent.putExtra("Result","S");
-                        intent.putExtra("seq",gameSequence.size()+2);
-                        int l=preferences.getInt("Level",1);
+                if (clicked >= gameSequence.size()) {
+                    if (clickedSequence.equals(gameSequence)) {
+                        Toast.makeText(getApplicationContext(), "Matched", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent();
+                        intent.putExtra("Result", "S");
+                        intent.putExtra("seq", gameSequence.size() + 2);
+                        int l = preferences.getInt("Level", 1);
                         l++;
-                        int s=preferences.getInt("score",0);
-                        s+=gameSequence.size();
-                        intent.putExtra("score",s);
-                        intent.putExtra("level",l);
-                        setResult(Activity.RESULT_OK,intent);
-                    }
-                    else {
+                        int s = preferences.getInt("score", 0);
+                        s += gameSequence.size();
+                        intent.putExtra("score", s);
+                        intent.putExtra("level", l);
+                        setResult(Activity.RESULT_OK, intent);
+                    } else {
                         Toast.makeText(GameScreen.this, "Failed", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(GameScreen.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-                        int s=preferences.getInt("score",0);
-                        intent.putExtra("score",s);
-                        intent.putExtra("Result","L");
+                        int s = preferences.getInt("score", 0);
+                        intent.putExtra("score", s);
+                        intent.putExtra("Result", "L");
                         // startActivity(intent);
-                        setResult(Activity.RESULT_OK,intent);
+                        setResult(Activity.RESULT_OK, intent);
                     }
                     finish();
-                    clicked=0;
+                    clicked = 0;
                     clickedSequence.clear();
                 }
             }
@@ -134,34 +139,33 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
             public void onClick(View v) {
                 clickedSequence.add(RED);
                 clicked++;
-                if (clicked>=gameSequence.size()){
-                    if (clickedSequence.equals(gameSequence)){
-                        Toast.makeText(getApplicationContext(),"Matched",Toast.LENGTH_LONG).show();
-                        Intent intent=new Intent();
-                        intent.putExtra("Result","S");
-                        intent.putExtra("seq",gameSequence.size()+2);
-                        int l=preferences.getInt("Level",1);
+                if (clicked >= gameSequence.size()) {
+                    if (clickedSequence.equals(gameSequence)) {
+                        Toast.makeText(getApplicationContext(), "Matched", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent();
+                        intent.putExtra("Result", "S");
+                        intent.putExtra("seq", gameSequence.size() + 2);
+                        int l = preferences.getInt("Level", 1);
                         l++;
-                        int s=preferences.getInt("score",0);
-                        s+=gameSequence.size();
-                        intent.putExtra("score",s);
-                        intent.putExtra("level",l);
-                        setResult(Activity.RESULT_OK,intent);
-                    }
-                    else {
+                        int s = preferences.getInt("score", 0);
+                        s += gameSequence.size();
+                        intent.putExtra("score", s);
+                        intent.putExtra("level", l);
+                        setResult(Activity.RESULT_OK, intent);
+                    } else {
                         Toast.makeText(GameScreen.this, "Failed", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(GameScreen.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-                        int s=preferences.getInt("score",0);
-                        intent.putExtra("score",s);
-                        intent.putExtra("Result","L");
-                        setResult(Activity.RESULT_OK,intent);
+                        int s = preferences.getInt("score", 0);
+                        intent.putExtra("score", s);
+                        intent.putExtra("Result", "L");
+                        setResult(Activity.RESULT_OK, intent);
                     }
                     finish();
 
-                    clicked=0;
+                    clicked = 0;
                     clickedSequence.clear();
                 }
             }
@@ -171,36 +175,35 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
             public void onClick(View v) {
                 clickedSequence.add(YELLOW);
                 clicked++;
-                if (clicked>=gameSequence.size()){
+                if (clicked >= gameSequence.size()) {
 
-                    if (clickedSequence.equals(gameSequence)){
-                        Toast.makeText(getApplicationContext(),"Matched",Toast.LENGTH_LONG).show();
-                        Intent intent=new Intent();
-                        intent.putExtra("Result","S");
-                        intent.putExtra("seq",gameSequence.size()+2);
-                        int l=preferences.getInt("Level",1);
+                    if (clickedSequence.equals(gameSequence)) {
+                        Toast.makeText(getApplicationContext(), "Matched", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent();
+                        intent.putExtra("Result", "S");
+                        intent.putExtra("seq", gameSequence.size() + 2);
+                        int l = preferences.getInt("Level", 1);
                         l++;
-                        int s=preferences.getInt("score",0);
-                        s+=gameSequence.size();
-                        intent.putExtra("score",s);
-                        intent.putExtra("level",l);
-                        setResult(Activity.RESULT_OK,intent);
-                    }
-                    else {
+                        int s = preferences.getInt("score", 0);
+                        s += gameSequence.size();
+                        intent.putExtra("score", s);
+                        intent.putExtra("level", l);
+                        setResult(Activity.RESULT_OK, intent);
+                    } else {
                         Toast.makeText(GameScreen.this, "Failed", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(GameScreen.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-                        int s=preferences.getInt("score",0);
-                        intent.putExtra("score",s);
-                        intent.putExtra("Result","L");
-                        intent.putExtra("player_name",preferences.getString("player_name",""));
-                        setResult(Activity.RESULT_OK,intent);
+                        int s = preferences.getInt("score", 0);
+                        intent.putExtra("score", s);
+                        intent.putExtra("Result", "L");
+                        intent.putExtra("player_name", preferences.getString("player_name", ""));
+                        setResult(Activity.RESULT_OK, intent);
                     }
                     finish();
 
-                    clicked=0;
+                    clicked = 0;
                     clickedSequence.clear();
                 }
             }
@@ -208,9 +211,6 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
-
-
-
 
 
     @Override
@@ -233,9 +233,8 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
         float y = event.values[1];
         float z = event.values[2];
 
-        tvx.setText(String.valueOf(x));
-        tvy.setText(String.valueOf(y));
-        tvz.setText(String.valueOf(z));
+
+
 
 
 

@@ -59,9 +59,7 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
         for (int value : gameSequence) {
             Log.e("array", String.valueOf(value));
         }
-        tvx = findViewById(R.id.tvX);
-        tvy = findViewById(R.id.tvY);
-        tvz = findViewById(R.id.tvZ);
+
         btblue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

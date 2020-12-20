@@ -43,7 +43,7 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
         btblue = findViewById(R.id.btBlue2);
         btred = findViewById(R.id.btRed2);
         btgreen = findViewById(R.id.btGreen2);
-        preferences=PreferenceManager.getDefaultSharedPreferences(GameScreen.this);
+        preferences=getSharedPreferences("score_ref", MODE_PRIVATE);
         editor=preferences.edit();
         btyellow = findViewById(R.id.btYellow2);
         clickedSequence=new ArrayList<>();
@@ -83,7 +83,8 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
                         int s=preferences.getInt("score",0);
                         intent.putExtra("score",s);
                         intent.putExtra("Result","L");
-                        setResult(Activity.RESULT_OK,intent);
+                        startActivity(intent);
+                        // setResult(Activity.RESULT_OK,intent);
                     }
                     finish();
                     clicked=0;
@@ -119,6 +120,7 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
                         int s=preferences.getInt("score",0);
                         intent.putExtra("score",s);
                         intent.putExtra("Result","L");
+                        // startActivity(intent);
                         setResult(Activity.RESULT_OK,intent);
                     }
                     finish();
@@ -170,6 +172,7 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
                 clickedSequence.add(YELLOW);
                 clicked++;
                 if (clicked>=gameSequence.size()){
+
                     if (clickedSequence.equals(gameSequence)){
                         Toast.makeText(getApplicationContext(),"Matched",Toast.LENGTH_LONG).show();
                         Intent intent=new Intent();
@@ -192,6 +195,7 @@ public class GameScreen extends AppCompatActivity implements SensorEventListener
                         int s=preferences.getInt("score",0);
                         intent.putExtra("score",s);
                         intent.putExtra("Result","L");
+                        intent.putExtra("player_name",preferences.getString("player_name",""));
                         setResult(Activity.RESULT_OK,intent);
                     }
                     finish();

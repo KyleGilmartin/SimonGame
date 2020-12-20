@@ -58,7 +58,7 @@ public class SecondScreen extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode==1){
+        if (resultCode == RESULT_OK){
             seq=0;
             gameSequence.clear();
             editor.putInt("Level",data.getIntExtra("level",1));
@@ -108,7 +108,7 @@ public class SecondScreen extends AppCompatActivity {
                 }
             }
         };
-        preferences = PreferenceManager.getDefaultSharedPreferences(SecondScreen.this);
+        preferences = getSharedPreferences("score_ref", MODE_PRIVATE);
         editor = preferences.edit();
         gameSequence=new ArrayList<>();
         level=findViewById(R.id.textView4);
